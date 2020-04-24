@@ -1,0 +1,5 @@
+---
+# vars file for lockdown-linux
+
+ld_std: "{{ lockdown_linux_standard }}"
+ld_std_fam: "{{ ld_std.split('_') | first }}"

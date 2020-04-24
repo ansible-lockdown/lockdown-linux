@@ -1,0 +1,12 @@
+---
+galaxy_info:
+  author: James Cassell
+  description: Configure Linux OS according to security standards (STIG or CIS)
+  # company: your company (optional)
+
+  license: MIT or BSD-3-Clause or Apache-2.0
+
+  min_ansible_version: 2.4
+
+  platforms:
+dependencies: []

@@ -1,0 +1,7 @@
+---
+# handlers file for lockdown-linux
+
+- name: restart sshd
+  service:
+    name: sshd
+    state: restarted
