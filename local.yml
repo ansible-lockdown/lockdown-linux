@@ -1,0 +1,6 @@
+---
+- name: apply linux_os lockdown
+  hosts: "{{ ansible_limit | default('localhost') }}"
+  gather_facts: no
+  roles:
+  - "{{ playbook_dir }}"
