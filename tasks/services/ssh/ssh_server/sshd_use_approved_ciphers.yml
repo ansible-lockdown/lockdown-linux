@@ -1,0 +1,9 @@
+- name: sshd_use_approved_ciphers
+  vars:
+    ld_rule_name: sshd_use_approved_ciphers
+    ld_rule_title_stig: implement DoD-approved encryption to protect the confidentiality of remote access sessions
+    ld_rule_sev_stig: MEDIUM
+    ld_option: Ciphers
+    ld_value_stig: aes128-ctr,aes192-ctr,aes256-ctr
+  block:
+  - import_tasks: lib/sshd_config.yml

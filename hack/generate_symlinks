@@ -1,5 +1,5 @@
 #!/bin/bash
 
 cd tasks/
-find \( -path ./all -o -path ./prep  \) -prune -o -path './*/*' -type f -not -name 'prep-*' -exec bash -c 'ln -sf ."$1" all/$(basename "${1%.yml}")' -- {} \;
-find \( -path ./all -o -path ./prep  \) -prune -o -path './*/*' -type f -name 'prep-*' -exec bash -c 'ln -sf ."$1" prep/$(basename "${1%.yml}")' -- {} \;
+find \( -path ./all -o -path ./lib -o -path ./prep  \) -prune -o -path './*/*' -not -type d -not -name 'prep-*' -exec bash -c 'ln -sf ."$1" all/$(basename "${1%.yml}")' -- {} \;
+find \( -path ./all -o -path ./lib -o -path ./prep  \) -prune -o -path './*/*' -not -type d -name 'prep-*' -exec bash -c 'ln -sf ."$1" prep/$(basename "${1%.yml}")' -- {} \;

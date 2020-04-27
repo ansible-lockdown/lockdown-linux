@@ -9,13 +9,4 @@
     ld_value_stig: hmac-sha2-256,hmac-sha2-512
     ld_value_cis: "{{ lockdown_linux_cis_sshd_approved_macs }}"
   block:
-  - name: "{{ ld_task_name }}"
-    lineinfile:
-      dest: /etc/ssh/sshd_config
-      insertafter: "(?i)^#[ \t]*{{ ld_option | regex_escape }}[ \t=]"
-      regexp: "(?i)^[ \t]*{{ ld_option | regex_escape }}[ \t=]"
-      line: "{{ ld_option ~ ' ' ~ ld_val }}"
-      validate: /usr/sbin/sshd -t -f %s
-    notify: restart sshd
-    vars:
-      ld_val: "{{ ld_value if (ld_value is string or ld_value is not iterable) else (ld_value | join(',')) }}"
+  - import_tasks: lib/sshd_config.yml

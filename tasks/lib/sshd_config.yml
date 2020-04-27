@@ -1,0 +1,15 @@
+# set configuration option in sshd_config
+# options:
+#   ld_option: sshd_config option to modify
+#   ld_value: value of sshd_config option
+
+- name: "{{ ld_task_name }}"
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    insertafter: "(?i)^#[ \t]*{{ ld_option | regex_escape }}[ \t=]"
+    regexp: "(?i)^[ \t]*{{ ld_option | regex_escape }}[ \t=]"
+    line: "{{ ld_option ~ ' ' ~ ld_val }}"
+    validate: /usr/sbin/sshd -t -f %s
+  notify: restart sshd
+  vars:
+    ld_val: "{{ ld_value if (ld_value is string or ld_value is not iterable) else (ld_value | join(',')) }}"

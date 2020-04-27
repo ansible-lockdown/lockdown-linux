@@ -28,15 +28,29 @@ ld_std_cis_rhel7:
     id: 5.2.11
 
 ld_std_stig_ol5:
+  sshd_use_approved_ciphers:
+    id: GEN005505
+    stig_rule: SV-63561r2_rule
+    dupes:
+      id: GEN005506
+      title: The SSH daemon must be configured to not use Cipher-Block Chaining (CBC) ciphers.
   sshd_use_approved_macs:
     id: GEN005507
     stig_rule: SV-63587r2_rule
     value: hmac-sha1
 
+ld_std_stig_ol6:
+  sshd_use_approved_ciphers:
+    id: OL6-00-000243
+    stig_rule: SV-65013r1_rule
+
 ld_std_stig_ol7:
   sshd_use_approved_macs:
     id: OL07-00-040400
     stig_rule: SV-108557r1_rule
+  sshd_use_approved_ciphers:
+    id: OL07-00-040110
+    stig_rule: SV-108523r1_rule
 
 ld_std_stig_rhel6:
   sshd_use_approved_macs:
@@ -45,23 +59,38 @@ ld_std_stig_rhel6:
     dupes:
     - id: RHEL-06-000244
       stig_rule: SV-106369r1_rule
+  sshd_use_approved_ciphers:
+    id: RHEL-06-000243
+    stig_rule: SV-50418r3_rule
 
 ld_std_stig_rhel7:
+  sshd_use_approved_ciphers:
+    id: RHEL-07-040110
+    stid_rule: SV-86845r3_rule
   sshd_use_approved_macs:
     id: RHEL-07-040400
     stig_rule: SV-86877r3_rule
 
 ld_std_stig_sle12:
+  sshd_use_approved_ciphers:
+    id: SLES-12-030170
+    stig_rule: SV-92151r2_rule
   sshd_use_approved_macs:
     id: SLES-12-030180
     stig_rule: SV-92153r2_rule
 
 ld_std_stig_ubuntu1604:
+  sshd_use_approved_ciphers:
+    id: UBTU-16-030230
+    stig_rule: SV-90509r3_rule
   sshd_use_approved_macs:
     id: UBTU-16-030240
     stig_rule: SV-90511r2_rule
 
 ld_std_stig_ubuntu1804:
+  sshd_use_approved_ciphers:
+    id: UBTU-18-010411
+    stig_rule: SV-109941r1_rule
   sshd_use_approved_macs:
     id: UBTU-18-010417
     sev: HIGH
