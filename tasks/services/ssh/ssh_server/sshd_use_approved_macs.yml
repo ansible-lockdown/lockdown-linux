@@ -1,22 +1,21 @@
 - name: sshd_use_approved_macs
   vars:
-    ld_rule_id: id
-    ld_rule_title: title
     ld_rule_name: sshd_use_approved_macs
     ld_rule_title_cis: Ensure only approved MAC algorithms are used
     ld_rule_title_stig: configure the SSH daemon to only use Message Authentication Codes (MACs) employing FIPS 140-2 approved cryptographic hash algorithms
+    ld_rule_sev_cis: Level 1
+    ld_rule_sev_stig: MEDIUM
+    ld_option: MACs
+    ld_value_stig: hmac-sha2-256,hmac-sha2-512
+    ld_value_cis: "{{ lockdown_linux_cis_sshd_approved_macs }}"
   block:
-  - name: "{{ ld_rule_id }} {{ ld_rule_title }}"
+  - name: "{{ ld_task_name }}"
     lineinfile:
       dest: /etc/ssh/sshd_config
       insertafter: "(?i)^#[ \t]*{{ ld_option | regex_escape }}[ \t=]"
       regexp: "(?i)^[ \t]*{{ ld_option | regex_escape }}[ \t=]"
-      line: "{{ ld_option ~ ' ' ~ ld_value }}"
+      line: "{{ ld_option ~ ' ' ~ ld_val }}"
       validate: /usr/sbin/sshd -t -f %s
     notify: restart sshd
     vars:
-      ld_option: MACs
-      ld_value_stig: hmac-sha2-256,hmac-sha2-512
-      ld_value_cis: "{{ lockdown_linux_cis_sshd_approved_macs }}"
-      ld_val: "{{ lookup('vars', 'ld_value_' ~ ld_std_fam) }}"
-      ld_value: "{{ ld_val if (ld_val is string) else (ld_val | join(',')) }}"
+      ld_val: "{{ ld_value if (ld_value is string or ld_value is not iterable) else (ld_value | join(',')) }}"

@@ -1,5 +1,12 @@
 ---
 # vars file for lockdown-linux
 
+ld_task_name: "{{ ld_rule_id }} | {{ ld_rule_sev }} | {{ ld_rule_title }}"
+
 ld_std: "{{ lockdown_linux_standard }}"
 ld_std_fam: "{{ ld_std.split('_') | first }}"
+
+ld_rule_id: "{{ lookup('vars', 'ld_rule_id_' ~ ld_std_fam, default=(ld_std_fam | upper)) }}"
+ld_rule_title: "{{ lookup('vars', 'ld_rule_title_' ~ ld_std_fam, default=ld_rule_name) }}"
+ld_rule_sev: "{{ lookup('vars', 'ld_rule_sev_' ~ ld_std_fam, default='~') }}"
+ld_value: "{{ lookup('vars', 'ld_value_' ~ ld_std_fam) }}"
