@@ -6,7 +6,60 @@ ld_task_name: "{{ ld_rule_id }} | {{ ld_rule_sev }} | {{ ld_rule_title }}"
 ld_std: "{{ lockdown_linux_standard }}"
 ld_std_fam: "{{ ld_std.split('_') | first }}"
 
-ld_rule_id: "{{ lookup('vars', 'ld_rule_id_' ~ ld_std_fam, default=(ld_std_fam | upper)) }}"
-ld_rule_title: "{{ lookup('vars', 'ld_rule_title_' ~ ld_std_fam, default=ld_rule_name) }}"
-ld_rule_sev: "{{ lookup('vars', 'ld_rule_sev_' ~ ld_std_fam, default='~') }}"
-ld_value: "{{ lookup('vars', 'ld_value_' ~ ld_std_fam) }}"
+ld_rule_id: "{{ ld_rule_spec.id
+    | default(lookup('vars', 'ld_rule_id_' ~ ld_std_fam,
+    default=(ld_std_fam | upper))) }}"
+ld_rule_title: "{{ ld_rule_spec.title
+    | default(lookup('vars', 'ld_rule_title_' ~ ld_std_fam,
+    default=ld_rule_name)) }}"
+ld_rule_sev: "{{ ld_rule_spec.sev
+    | default(lookup('vars', 'ld_rule_sev_' ~ ld_std_fam,
+    default='~')) }}"
+ld_value: "{{ ld_rule_spec.value
+    | default(lookup('vars', 'ld_value_' ~ ld_std_fam)) }}"
+
+ld_rule_spec: "{{ (lookup('vars', 'ld_std_' ~ ld_std, default={}))[ld_rule_name] | default({}) }}"
+
+ld_std_cis_rhel7:
+  sshd_use_approved_macs:
+    id: 5.2.11
+
+ld_std_stig_ol5:
+  sshd_use_approved_macs:
+    id: GEN005507
+    stig_rule: SV-63587r2_rule
+    value: hmac-sha1
+
+ld_std_stig_ol7:
+  sshd_use_approved_macs:
+    id: OL07-00-040400
+    stig_rule: SV-108557r1_rule
+
+ld_std_stig_rhel6:
+  sshd_use_approved_macs:
+    id: RHEL-06-000228
+    stig_rule: SV-109117r1_rule
+    dupes:
+    - id: RHEL-06-000244
+      stig_rule: SV-106369r1_rule
+
+ld_std_stig_rhel7:
+  sshd_use_approved_macs:
+    id: RHEL-07-040400
+    stig_rule: SV-86877r3_rule
+
+ld_std_stig_sle12:
+  sshd_use_approved_macs:
+    id: SLES-12-030180
+    stig_rule: SV-92153r2_rule
+
+ld_std_stig_ubuntu1604:
+  sshd_use_approved_macs:
+    id: UBTU-16-030240
+    stig_rule: SV-90511r2_rule
+
+ld_std_stig_ubuntu1804:
+  sshd_use_approved_macs:
+    id: UBTU-18-010417
+    sev: HIGH
+    stig_rule: SV-109951r1_rule
