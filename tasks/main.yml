@@ -1,1 +1,6 @@
-services/ssh/ssh_server/sshd_use_approved_macs.yml
+---
+# tasks file for lockdown-linux
+
+- import_tasks: "{{ ld_task_file }}"
+  vars:
+    ld_rule_name: sshd_use_approved_macs

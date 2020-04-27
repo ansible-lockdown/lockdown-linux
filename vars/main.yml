@@ -3,6 +3,8 @@
 
 ld_task_name: "{{ ld_rule_id }} | {{ ld_rule_sev }} | {{ ld_rule_title }}"
 
+ld_task_file: "{{ ('all/' ~ ld_rule_name) if (ld_rule_name in ld_std_spec.keys()) else 'noop.yml' }}"
+
 ld_std: "{{ lockdown_linux_standard }}"
 ld_std_fam: "{{ ld_std.split('_') | first }}"
 
@@ -18,7 +20,8 @@ ld_rule_sev: "{{ ld_rule_spec.sev
 ld_value: "{{ ld_rule_spec.value
     | default(lookup('vars', 'ld_value_' ~ ld_std_fam)) }}"
 
-ld_rule_spec: "{{ (lookup('vars', 'ld_std_' ~ ld_std, default={}))[ld_rule_name] | default({}) }}"
+ld_std_spec: "{{ (lookup('vars', 'ld_std_' ~ ld_std, default={})) }}"
+ld_rule_spec: "{{ ld_std_spec[ld_rule_name] | default({}) }}"
 
 ld_std_cis_rhel7:
   sshd_use_approved_macs:
