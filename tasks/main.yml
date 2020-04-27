@@ -1,6 +1,8 @@
 ---
 # tasks file for lockdown-linux
 
+- import_tasks: prep.yml
+
 - import_tasks: "{{ ld_task_file }}"
   vars:
     ld_rule_name: sshd_use_approved_macs
