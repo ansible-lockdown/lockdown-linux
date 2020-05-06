@@ -1,3 +1,25 @@
+- name: gather distribution facts
+  setup:
+    gather_subset: distribution,!min
+  failed_when: ansible_facts.distribution is not defined
+  when: ansible_facts.distribution is not defined
+
+- name: gather service_mgr and pkg_mgr
+  setup:
+    gather_subset: pkg_mgr,service_mgr,!min
+  failed_when:
+  - ansible_facts.pkg_mgr is not defined or
+    ansible_facts.service_mgr is not defined
+  when:
+  - ansible_facts.pkg_mgr is not defined or
+    ansible_facts.service_mgr is not defined
+
+- name: gather chroot fact
+  setup:
+    gather_subset: chroot,!min
+  failed_when: ansible_facts.is_chroot is not defined
+  when: ansible_facts.is_chroot is not defined
+
 - import_tasks: "{{ ld_prep_cond_file }}"
   vars:
     ld_prep_file: lib/package-openssh-server.yml
