@@ -5,11 +5,12 @@
 
 - name: "{{ ld_task_name }}"
   lineinfile:
+    create: "{{ ansible_check_mode and ld_sshd_package is changed }}"
     dest: /etc/ssh/sshd_config
     insertafter: "(?i)^#[ \t]*{{ ld_option | regex_escape }}[ \t=]"
     regexp: "(?i)^[ \t]*{{ ld_option | regex_escape }}[ \t=]"
     line: "{{ ld_option ~ ' ' ~ ld_val }}"
-    validate: /usr/sbin/sshd -t -f %s
+    validate: /usr/sbin/sshd -oHostKey={{ ld_ssh_host_key }} -t -f %s
   notify: restart sshd
   vars:
     ld_val: "{{ ld_value if (ld_value is string or ld_value is not iterable) else (ld_value | join(',')) }}"

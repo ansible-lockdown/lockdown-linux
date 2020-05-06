@@ -1,0 +1,7 @@
+- import_tasks: "{{ ld_clean_cond_file }}"
+  vars:
+    ld_clean_file: lib/clean-openssh-server.yml
+    ld_rule_names: >-
+      {{ q('fileglob', 'tasks/services/ssh/ssh_server/sshd_*yml') | map('basename') | map('regex_replace', '(.*)\.yml', '\1') | list }}
+    #- sshd_use_approved_macs
+    #- sshd_use_approved_ciphers

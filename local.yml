@@ -2,5 +2,9 @@
 - name: apply linux_os lockdown
   hosts: "{{ ansible_limit | default('localhost') }}"
   gather_facts: no
+  pre_tasks:
+  - setup:
+      gather_subset: distribution
+    when: ansible_distribution is not defined
   roles:
   - "{{ playbook_dir }}"

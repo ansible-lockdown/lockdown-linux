@@ -6,6 +6,7 @@ ld_task_name: "{{ ld_rule_id }} | {{ ld_rule_sev }} | {{ ld_rule_title }}"
 ld_task_file: "{{ ('all/' ~ ld_rule_name) if (ld_rule_name in ld_std_spec.keys()) else 'noop.yml' }}"
 ld_prep_file: "{{ ('prep/prep-' ~ ld_rule_name) if (ld_rule_name in ld_std_spec.keys()) else 'noop.yml' }}"
 ld_prep_cond_file: "{{ ld_prep_file if (ld_rule_names | intersect(ld_std_spec.keys())) else 'noop.yml' }}"
+ld_clean_cond_file: "{{ ld_clean_file if (ld_rule_names | intersect(ld_std_spec.keys())) else 'noop.yml' }}"
 
 ld_std: "{{ lockdown_linux_standard }}"
 ld_std_fam: "{{ ld_std.split('_') | first }}"
@@ -24,6 +25,10 @@ ld_value: "{{ ld_rule_spec.value
 
 ld_std_spec: "{{ (lookup('vars', 'ld_std_' ~ ld_std, default={})) }}"
 ld_rule_spec: "{{ ld_std_spec[ld_rule_name] | default({}) }}"
+
+ld_ssh_host_key: >-
+  {{ '/etc/ssh/ssh_host_rsa_key' if ld_linux_ssh_host_key_check.stat.exists
+  else ld_linux_ssh_host_rsa_key.path ~ '/ssh_host_rsa_key' }}
 
 ld_std_cis_rhel7:
   sshd_use_approved_macs:

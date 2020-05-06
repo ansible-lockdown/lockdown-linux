@@ -1,3 +1,35 @@
 - name: install openssh-server
   package:
     name: "{{ 'openssh-server' if (ansible_os_family | d('') != 'Suse') else 'openssh' }}"
+  register: ld_sshd_package
+
+- name: /run/sshd directory on Debian
+  file:
+    dest: /run/sshd
+    state: directory
+    mode: '0755'
+  when: (ansible_os_family | d('') == 'Debian')
+
+- name: check for host keys
+  stat:
+    path: /etc/ssh/ssh_host_rsa_key
+  register: ld_linux_ssh_host_key_check
+
+- name: create temporary host keys
+  block:
+  - name: create temp file for ssh_host_rsa_key
+    tempfile:
+      path: /dev/shm
+      state: directory
+    register: ld_linux_ssh_host_rsa_key
+    changed_when: no
+    check_mode: no
+
+  - name: create temporary ssh_host_rsa_key
+    command: ssh-keygen -N '' -f {{ ld_ssh_host_key }} -t rsa -b 4096
+    args:
+      creates: "{{ ld_ssh_host_key }}"
+    check_mode: no
+    changed_when: no
+  when:
+  - not ld_linux_ssh_host_key_check.stat.exists
