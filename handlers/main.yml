@@ -5,3 +5,4 @@
   service:
     name: sshd
     state: restarted
+  when: ld_system_is_running

@@ -20,6 +20,12 @@
   failed_when: ansible_facts.is_chroot is not defined
   when: ansible_facts.is_chroot is not defined
 
+- name: detect whether system is running
+  shell: IFS= read -r -d '' cmd </proc/1/cmdline ; printf "%s\n" "$cmd"
+  check_mode: no
+  register: ld_init_check
+  changed_when: no
+
 - import_tasks: "{{ ld_prep_cond_file }}"
   vars:
     ld_prep_file: lib/package-openssh-server.yml

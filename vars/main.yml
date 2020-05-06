@@ -26,6 +26,12 @@ ld_value: "{{ ld_rule_spec.value
 ld_std_spec: "{{ (lookup('vars', 'ld_std_' ~ ld_std, default={})) }}"
 ld_rule_spec: "{{ ld_std_spec[ld_rule_name] | default({}) }}"
 
+# detect whether the system is running live
+ld_system_is_running: "{{ (ld_init_check.stdout | basename) in
+    ['systemd', 'init'] and
+    (ansible_facts.service_mgr in ['sysvinit', 'systemd'])
+    and not ansible_facts.is_chroot }}"
+
 ld_ssh_host_key: >-
   {{ '/etc/ssh/ssh_host_rsa_key' if ld_linux_ssh_host_key_check.stat.exists
   else ld_linux_ssh_host_rsa_key.path ~ '/ssh_host_rsa_key' }}
