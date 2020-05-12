@@ -27,9 +27,10 @@ ld_std_spec: "{{ (lookup('vars', 'ld_std_' ~ ld_std, default={})) }}"
 ld_rule_spec: "{{ ld_std_spec[ld_rule_name] | default({}) }}"
 
 # detect whether the system is running live
-ld_system_is_running: "{{ (ld_init_check.stdout | basename) in
-    ['systemd', 'init'] and
-    (ansible_facts.service_mgr in ['sysvinit', 'systemd'])
+ld_system_is_running: "{{ ((ld_init_check.stdout_lines | first | basename | regex_replace(' .*', '')) in
+    ['systemd', 'init'] and (ansible_facts.service_mgr in ['sysvinit', 'systemd'])
+    or ld_init_check.stdout_lines | intersect(['etc/rc.d/rc', '/etc/rc.d/rc']) | length > 0
+    and ansible_facts.service_mgr == 'dumb-init')
     and not ansible_facts.is_chroot }}"
 
 ld_ssh_host_key: >-

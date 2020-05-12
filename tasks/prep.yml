@@ -21,7 +21,7 @@
   when: ansible_facts.is_chroot is not defined
 
 - name: detect whether system is running
-  shell: IFS= read -r -d '' cmd </proc/1/cmdline ; printf "%s\n" "$cmd"
+  shell: while IFS= read -r -d '' cmd  ; do printf "%s\n" "$cmd" ; done </proc/1/cmdline
   check_mode: no
   register: ld_init_check
   changed_when: no
